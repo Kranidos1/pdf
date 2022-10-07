@@ -14,16 +14,16 @@ class PDF(canvas.Canvas):
         
     def __headerFattura__(self ,listaStringhe ,fontTitle ,sizeTitle ,fontFields ,sizeFields ,path):
         
-        image = Image.open(path)
-        width,heigth = image.size
+        #image = Image.open(path)
+        #width,heigth = image.size
         
-        func.resizeImmagine(path ,150 ,200)
-        if(width <= heigth):
+        #func.resizeImmagine(path ,150 ,200)
+        #if(width <= heigth):
             
-            self.drawInlineImage(path ,50 ,600 ,100 ,200)
+            #self.drawInlineImage(path ,50 ,600 ,100 ,200)
             
-        else:
-            self.drawInlineImage(path ,50 ,600 ,200 ,150)
+        #else:
+            #self.drawInlineImage(path ,50 ,600 ,200 ,150)
             
         #salvi in due variabili lunghezza e altezza foglio
         width,heigth = A4
