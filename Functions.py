@@ -76,24 +76,29 @@ def getStringHeight(heightGiven ,font ,fontSize):
     return val_h
 
 #quando il testo e' a destra e immagine a sinistra ridimensiona il pointsize per entrare in un determinato spazio
-def resizingOrizzontaleLatoDestro(width ,posXLongest ,listaValutazione ,listaFields ,listaStringhe ,fontTitle ,fontFields ,sizeTitle ,sizeFields ,flagSide ,loopFlag):
+def resizingOrizzontaleLatoDestro(width ,posXLongest ,listaValutazione ,listaFields ,listaStringhe ,flagSide ,loopFlag ,fontsList ,pointSizeList ,maxPointX):
     
     while loopFlag == 1:
 
-        if not all(elem > 250 for elem in listaFields) or not listaValutazione[0] > 250:
+        
+        if not all(elem > maxPointX for elem in listaFields) or not listaValutazione[0] > maxPointX:
             
-            sizeFields = sizeFields - 1
-            sizeTitle = sizeTitle - 1     
+            
+            #resizing
+            pointSizeList[0] = pointSizeList[0] - 1
+            pointSizeList[1] = pointSizeList[1] - 1
+            pointSizeList[2] = pointSizeList[2] - 1
+            pointSizeList[3] = pointSizeList[3] - 1   
             
         else:
                     
             loopFlag = 0
             
         #ricalcola
-        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontTitle ,sizeTitle ,flagSide)
-        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontFields ,sizeFields ,flagSide)
-        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontFields ,sizeFields ,flagSide)
-        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontFields ,sizeFields ,flagSide)
+        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontsList[0] ,pointSizeList[0] ,flagSide)
+        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontsList[1] ,pointSizeList[1] ,flagSide)
+        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontsList[3] ,pointSizeList[3] ,flagSide)
+        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontsList[2] ,pointSizeList[2] ,flagSide)
         listaValutazione = [posXTitolo ,posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
         listaFields = [posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
         
@@ -104,41 +109,59 @@ def resizingOrizzontaleLatoDestro(width ,posXLongest ,listaValutazione ,listaFie
         #CASO TITOLO
         if(listaStringhe[indexLongest] == listaStringhe[0]):
             
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontTitle ,sizeTitle ,flagSide)
+            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[0] ,pointSizeList[0] ,flagSide)
         
         else:
             
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontFields ,sizeFields ,flagSide)
+            if(indexLongest == 1):
+                
+                longestFaceNameFont = fontsList[1]
+                longestPointSize = pointSizeList[1]
+                
+            elif(indexLongest == 2):
+                
+                longestFaceNameFont = fontsList[2]
+                longestPointSize = pointSizeList[2]
+                
+            else:     
+                
+                longestFaceNameFont = fontsList[3]
+                longestPointSize = pointSizeList[3]                           
+                
+            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,longestFaceNameFont ,longestPointSize ,flagSide)
     
         
-    return posXLongest ,sizeTitle ,sizeFields
+    return posXLongest ,pointSizeList
 
 #quando il testo e' a sinistra e immagine a destra ridimensiona il pointsize per entrare in un determinato spazio
-def resizingOrizzontaleLatoSinistro(width ,posXLongest ,listaValutazione ,listaLunghezze ,listaStringhe ,fontTitle ,fontFields ,sizeTitle ,sizeFields ,flagSide ,loopFlag):
+def resizingOrizzontaleLatoSinistro(width ,posXLongest ,listaValutazione ,listaLunghezze ,listaStringhe ,flagSide ,loopFlag ,fontsList ,pointSizeList):
     
     
     while loopFlag == 1:
         
-        lunghezzaTitolo = stringWidth(listaStringhe[0] ,fontTitle ,sizeTitle)
-        lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,fontFields ,sizeFields)
-        lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,fontFields ,sizeFields)
-        lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,fontFields ,sizeFields)
+        lunghezzaTitolo = stringWidth(listaStringhe[0] ,fontsList[0] ,pointSizeList[0])
+        lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,fontsList[1] ,pointSizeList[1])
+        lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,fontsList[2] ,pointSizeList[2])
+        lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,fontsList[3] ,pointSizeList[3])
             
         listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]
             
         if not all(elem < 380 for elem in listaLunghezze):     
             
-            sizeFields = sizeFields - 1
-            sizeTitle = sizeTitle - 1       
+            #resizing
+            pointSizeList[0] = pointSizeList[0] - 1
+            pointSizeList[1] = pointSizeList[1] - 1
+            pointSizeList[2] = pointSizeList[2] - 2
+            pointSizeList[3] = pointSizeList[3] - 1
             
         else:
                     
             loopFlag = 0
         #ricalcola
-        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontTitle ,sizeTitle ,flagSide)
-        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontFields ,sizeFields ,flagSide)
-        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontFields ,sizeFields ,flagSide)
-        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontFields ,sizeFields ,flagSide)
+        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontsList[0] ,pointSizeList[0] ,flagSide)
+        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontsList[1] ,pointSizeList[1] ,flagSide)
+        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontsList[3] ,pointSizeList[3] ,flagSide)
+        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontsList[2] ,pointSizeList[2] ,flagSide)
         listaValutazione = [posXTitolo ,posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
         
         #stringa più lunga che permette di centralizzare le stirnghe
@@ -148,11 +171,26 @@ def resizingOrizzontaleLatoSinistro(width ,posXLongest ,listaValutazione ,listaL
         #CASO TITOLO
         if(listaStringhe[indexLongest] == listaStringhe[0]):
             
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontTitle ,sizeTitle ,flagSide)
+            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[0] ,pointSizeList[0] ,flagSide)
         
         else:
             
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontFields ,sizeFields ,flagSide)
+            if(indexLongest == 1):
+                
+                longestFaceNameFont = fontsList[1]
+                longestPointSize = pointSizeList[1]
+                
+            elif(indexLongest == 2):
+                
+                longestFaceNameFont = fontsList[2]
+                longestPointSize = pointSizeList[2]
+                
+            else:     
+                
+                longestFaceNameFont = fontsList[3]
+                longestPointSize = pointSizeList[3]                           
+                
+            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,longestFaceNameFont ,longestPointSize ,flagSide)
             
-    return posXLongest ,sizeTitle ,sizeFields
+    return posXLongest ,pointSizeList
         
