@@ -58,9 +58,6 @@ class PersonalizedDialog(wx.Dialog):
         self.boxAll.Add(self.boxScelte ,proportion = 0 ,flag = wx.ALL ,border = 5)
         
         
-        #self.boxSceltaESample.Add(self.listFonts ,proportion = 0 ,flag = wx.ALL ,border = 5)
-        #self.boxSceltaESample.Add(self.fieldSample ,proportion = 0 ,flag = wx.ALL ,border = 5)
-        
         self.panel.SetSizerAndFit(self.boxAll)
         
         self.buttonColore.Bind(wx.EVT_BUTTON ,self.cambiaColore)

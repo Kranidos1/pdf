@@ -152,10 +152,7 @@ class MainFrame(wx.Frame):
         
         self.SetSize((748, 355))
         self.SetMinSize((748, 355))
-        self.SetMaxSize((748, 355))
-        
-        
-        
+        self.SetMaxSize((748, 355))    
                 
     def cambiaFont(self ,evt):
              #non appare mai la V
@@ -258,7 +255,8 @@ class MainFrame(wx.Frame):
                                     
                                 if(self.path != None):
                                     
-                                    pdf.__headerFattura__(self.values ,'ELEPA' ,64 ,"Times-Roman" ,32 ,self.path ,flagSide)
+                                    #self.infoFonts
+                                    pdf.__headerFattura__(self.values ,'ELEPA' ,64 ,"Times-Roman" ,32 ,self.path ,flagSide ,self.infoFonts)
                                 
                                 else:
                                     
