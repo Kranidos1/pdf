@@ -11,7 +11,7 @@ width ,height = A4
 #app = wx.App()
 #mainFrame = MainFrame()
 #mainFrame.Show()
-fontsInfo = [(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 24) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),
+fontsInfo = [(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 27) ,(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),
                                                                                 (0, 0, 0, 255), 32) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14)]
 
 pdf = PDF("test1.pdf")

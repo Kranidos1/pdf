@@ -207,18 +207,35 @@ class PDF(canvas.Canvas):
         fontsList = [faceNameFontTitle ,faceNameFontSecondLine ,faceNameFontThirdLine ,faceNameFontFourthLine]
         pointsSizeList = [pointSizeTitle ,pointSizeSecondLine ,pointSizeThirdLine ,pointSizeFourthLine]
         
-        #if flagSide == "r":
+        if flagSide == "r":
             
-            #lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
-            #lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,faceNameFontSecondLine ,pointSizeSecondLine)
-            #lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,faceNameFontThirdLine ,pointSizeThirdLine)
-            #lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,faceNameFontFourthLine ,pointSizeFourthLine)
+            lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
+            lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,faceNameFontSecondLine ,pointSizeSecondLine)
+            lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,faceNameFontThirdLine ,pointSizeThirdLine)
+            lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,faceNameFontFourthLine ,pointSizeFourthLine)
         
-            #listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]                   
+            listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]                   
+            
+            while not all((elem + 20) < val for elem in listaLunghezze):
                 
-            #if not all(elem + 20 < val for elem in listaLunghezze):
+                pointSizeTitle = pointSizeTitle - 1
+                pointSizeSecondLine = pointSizeSecondLine - 1
+                pointSizeThirdLine = pointSizeThirdLine - 1
+                pointSizeFourthLine = pointSizeFourthLine - 1
                 
-                #loopFlag = 1
+                lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
+                lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,faceNameFontSecondLine ,pointSizeSecondLine)
+                lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,faceNameFontThirdLine ,pointSizeThirdLine)
+                lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,faceNameFontFourthLine ,pointSizeFourthLine)
+            
+                listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail] 
+                
+                ma = max(listaLunghezze)
+                pos = listaLunghezze.index(ma)
+
+                posXLongest = func.getStringX(width ,None ,listaStringhe[pos] ,fontsList[pos] ,pointsSizeList[pos] ,flagSide)
+                
+
         
                 #TODO DA RIVEDERE
                 #quando immaggine e' a destra avviene un resizing automatico dei campi che sforano
@@ -251,7 +268,7 @@ class PDF(canvas.Canvas):
         
         self.setFillColorRGB(colourTitle[0] ,colourTitle[1] ,colourTitle[2])         
         self.setFont(faceNameFontTitle ,pointSizeTitle)
-        self.drawString(posXTitolo ,posYTitolo ,listaStringhe[0])
+        self.drawString(posXTitolo - 20,posYTitolo ,listaStringhe[0])
 
         self.setFillColorRGB(colourSecondLine[0] ,colourSecondLine[1] ,colourSecondLine[2])    
         self.setFont(faceNameFontSecondLine ,pointSizeSecondLine)

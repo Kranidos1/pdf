@@ -81,7 +81,7 @@ def resizingOrizzontaleLatoDestro(width ,posXLongest ,listaValutazione ,listaFie
     while loopFlag == 1:
 
         
-        if not all(elem > maxPointX for elem in listaFields) or not listaValutazione[0] > maxPointX:
+        if not all(elem  > maxPointX for elem in listaFields) or not listaValutazione[0] > maxPointX:
             
             
             #resizing
