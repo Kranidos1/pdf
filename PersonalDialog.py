@@ -28,7 +28,6 @@ class PersonalizedDialog(wx.Dialog):
         self.listaFonts = wx.ListBox(self.panel ,choices = listChoices ,size = (250,250) ,style = wx.LB_SINGLE)
         self.boxFonts.Add(self.listaFonts ,proportion = 0 ,flag = wx.ALL ,border = 5)
         
-        #self.boxSceltaESample = wx.BoxSizer(wx.HORIZONTAL)
         self.SetEscapeId(wx.ID_CLOSE)
         self.boxScelte = wx.BoxSizer(wx.VERTICAL)
         #da migliorare
@@ -64,8 +63,6 @@ class PersonalizedDialog(wx.Dialog):
         self.spin.Bind(wx.EVT_SPINCTRL ,self.raccogliSize)
         self.buttonColore.Bind(wx.EVT_BUTTON ,self.cambiaColore)
         self.listaFonts.Bind(wx.EVT_LISTBOX ,self.cambiaFont)
-        #self.buttonScelto.Bind(wx.EVT_BUTTON ,self.raccogliInfo)
-
         
         self.Fit()
         
