@@ -2,7 +2,7 @@ from multiprocessing.sharedctypes import Value
 import wx
 from PDFFolder.PDFClass import PDF
 
-from FrameFolder.PersonalDialog import PersonalizedDialog
+from FramesFolder.PersonalDialog import PersonalizedDialog
 
 class MainFrame(wx.Frame):
     
