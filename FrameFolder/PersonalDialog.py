@@ -1,5 +1,8 @@
 
 import wx
+import matplotlib.font_manager
+import matplotlib.ft2font as ft2font
+
 class PersonalizedDialog(wx.Dialog):
     
     def __init__(self ,info):
@@ -20,10 +23,11 @@ class PersonalizedDialog(wx.Dialog):
         
         self.boxFonts = wx.StaticBoxSizer(wx.VERTICAL ,self.panel ,label = "Fonts disponibili :")
         
-        listChoices = ["Courier" ,"Courier-Bold" ,"Courier-Bold Italic" ,"Courier-Italic" ,"Times" ,"Times-Bold" ,"Times-Bold Italic" 
-                       ,"Times-Italic" ,"Bauhaus 93" ,"Arial" ,"Arial-Bold" ,"Arial-Bold Italic" ,"Arial-Italic" ,"Bernard" ,"Cooper" ,"Elephant" ,"Elephant-Italic"]
+        #listChoices = ["Courier" ,"Courier-Bold" ,"Courier-Bold Italic" ,"Courier-Italic" ,"Times" ,"Times-Bold" ,"Times-Bold Italic" 
+                       #,"Times-Italic" ,"Bauhaus 93" ,"Arial" ,"Arial-Bold" ,"Arial-Bold Italic" ,"Arial-Italic" ,"Bernard" ,"Cooper" ,"Elephant" ,"Elephant-Italic"]
         
-        self.listaFonts = wx.ListBox(self.panel ,choices = listChoices ,size = (250,250) ,style = wx.LB_SINGLE)
+        self.listChoices = sorted(matplotlib.font_manager.get_font_names())
+        self.listaFonts = wx.ListBox(self.panel ,choices = self.listChoices ,size = (250,250) ,style = wx.LB_SINGLE)
         self.boxFonts.Add(self.listaFonts ,proportion = 0 ,flag = wx.ALL ,border = 5)
         
         self.SetEscapeId(wx.ID_CLOSE)
@@ -82,157 +86,23 @@ class PersonalizedDialog(wx.Dialog):
      #font handling       
     def cambiaFont(self ,evt):
         
-        posFont = self.listaFonts.GetSelection()
-        
-        if(posFont == 0 or posFont == 1 or posFont == 2 or posFont == 3):
+        try:
+            posFont = self.listaFonts.GetSelection()
+            faceName = self.listChoices[posFont]
             
-            faceName = "Courier"
             font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName, encoding = wx.FONTENCODING_DEFAULT)
-            #COUR.TTF
-            if(posFont == 0):
-                
-                #Courier
-                path = "COUR.TTF"
-                self.labelSample.SetFont(font) 
-                self.info[0] = (faceName ,path)
-                              
-            if(posFont == 1):
-                
-                #Courier-Bold COURBD.TTF
-                path = "COURBD.TTF"
-                
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Bold())
+                        underline = False, faceName = faceName, encoding = wx.FONTENCODING_DEFAULT)
             
-            if(posFont == 2):
-                
-                #Courier-BoldItalic COURBI.TTF
-                path = "COURBI.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Bold().Italic())
-                
-            if(posFont == 3):
-                
-                #Courier-BoldItalic COURI.TTF
-                path = "COURI.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Italic())             
-            
-        if(posFont == 4 or posFont == 5 or posFont == 6 or posFont == 7):
-            
-            faceName = "Times New Roman"
-            font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName, encoding = wx.FONTENCODING_DEFAULT) 
-            
-            if(posFont == 4):
-                #Times New Roman TIMES.TTF
-                path = "TIMES.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font)        
-            
-            if(posFont == 5):
-                
-                #Times New Roman-Bold TIMESBD.TTF
-                path = "TIMESBD.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Bold())       
-                             
-            if(posFont == 6):
-                
-                #Times New Roman-BoldItalic TIMESBI.TTF
-                path = "TIMESBI.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Bold().Italic())  
-                             
-            if(posFont == 7):
-                
-                #Times New Roman-Italic TIMESI.TTF
-                path = "TIMESI.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Italic())   
-                
-        if(posFont == 8):
-                
-                #Bauhaus 93      BAUHS93.TTF
-                faceName = "Bauhaus 93"
-                font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName ,encoding = wx.FONTENCODING_DEFAULT)
-                path = "BAUHS93.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font)
-        
-        if(posFont == 9 or posFont == 10 or posFont == 11 or posFont == 12):
-            
-                #Arial     ARIAL.TTF
-                faceName = "Arial"
-                font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName, encoding = wx.FONTENCODING_DEFAULT)  
-                          
-                if(posFont == 9):
-                    
-                    #Arial
-                    path = "ARIAL.TTF"
-                    self.info[0] = (faceName ,path)
-                    self.labelSample.SetFont(font) 
-                
-                if(posFont == 10):
-                    #Arial-Bold ARIALBD.TTF
-                    path = "ARIALBD.TTF"
-                    self.info[0] = (faceName ,path)
-                    self.labelSample.SetFont(font.Bold())
-                    
-                if(posFont == 11):
-                    
-                    #Arial-BoldItalic ARIALBI.TTF
-                    path = "ARIALBI.TTF"
-                    self.info[0] = (faceName ,path)
-                    self.labelSample.SetFont(font.Bold().Italic())
-                    
-                if(posFont == 12):
-                    
-                    #Arial-Italic ARIALI.TTF
-                    path = "ARIALI.TTF"
-                    self.info[0] = (faceName ,path)
-                    self.labelSample.SetFont(font.Italic())
-        
-        if(posFont == 13):
-            #Bernard Mt BERNHC.TTF
-            faceName = "Bernard MT Condensed"
-            font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName ,encoding = wx.FONTENCODING_DEFAULT)  
-
-            path = "BERNHC.TTF"
+            path = matplotlib.font_manager.findfont(faceName)
+            self.labelSample.SetFont(font)
             self.info[0] = (faceName ,path)
-            self.labelSample.SetFont(font)   
-        
-        if(posFont == 14):
-            #Cooper COOPBL.TTF
-            faceName = "Cooper"
-            font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                    underline = False, faceName = faceName ,encoding = wx.FONTENCODING_DEFAULT)  
-
-            path = "COOPBL.TTF"
-            self.info[0] = (faceName ,path)
-            self.labelSample.SetFont(font)        
             
-        if(posFont == 15 or posFont == 16):
-            #Elephant
-            faceName = "Elephant"
-            font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
-                underline = False, faceName = faceName ,encoding = wx.FONTENCODING_DEFAULT)  
-    
-            if(posFont == 15):
-                #Elephant ELEPHNT.TTF
-                path = "ELEPHNT.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font)
-                
-            if(posFont == 16):
-                #Elephant-Italic ELEPHNTI.TTF
-                path = "ELEPHNTI.TTF"
-                self.info[0] = (faceName ,path)
-                self.labelSample.SetFont(font.Italic())
+        except ValueError:
+            
+            #font non viene modificato. Problema con i font con -
+            dial = wx.MessageDialog(self.panel ,"Font non disponibile." , caption = "Font error.", style = wx.ICON_EXCLAMATION | wx.OK )
+            dial.ShowModal()              
+            
                 
     def GetData(self):
         
