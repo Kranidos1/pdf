@@ -1,11 +1,5 @@
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase.pdfmetrics import stringWidth
 import wx
-from FrameFolder.Frame import MainFrame
-from PDFFolder.PDFClass import PDF
-from FrameFolder.PersonalDialog import PersonalizedDialog
-width ,height = A4
-import os
+from FramesFolder.Frame import MainFrame
 
 app = wx.App()
 mainFrame = MainFrame()

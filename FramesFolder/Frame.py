@@ -2,7 +2,7 @@ from multiprocessing.sharedctypes import Value
 import wx
 from PDFFolder.PDFClass import PDF
 
-from FramesFolder.PersonalDialog import PersonalizedDialog
+from FrameFolder.PersonalDialog import PersonalizedDialog
 
 class MainFrame(wx.Frame):
     
@@ -10,7 +10,7 @@ class MainFrame(wx.Frame):
     def __init__(self):
         
 
-        super().__init__(parent = None ,title = "HeaderPDF")
+        super().__init__(parent = None ,title = "mainFrame")
         
         #default fonts
         self.infoFonts = [(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 24) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),

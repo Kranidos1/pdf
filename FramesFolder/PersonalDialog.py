@@ -8,7 +8,7 @@ class PersonalizedDialog(wx.Dialog):
     def __init__(self ,info):
         
         #trick per permettere resizare un dialog
-        super().__init__(parent = None ,title = "FontDialog" ,style = wx.RESIZE_BORDER | wx.DEFAULT_DIALOG_STYLE | wx.ID_OK)
+        super().__init__(parent = None ,title = "PersonalizedDialog" ,style = wx.RESIZE_BORDER | wx.DEFAULT_DIALOG_STYLE | wx.ID_OK)
         
         #(faceName ,path.ttf),rgb,pointsize di default
         self.info = list(info)
