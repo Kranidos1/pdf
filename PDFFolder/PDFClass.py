@@ -10,7 +10,9 @@ class PDF(canvas.Canvas):
     def __init__(self ,pdfPath):
         
         super().__init__(pdfPath ,pagesize = A4 ,bottomup = 1)
-        
+    
+    #Le misure sono calcolate in base alla misura di default ovvero 1/72 di inch che corrisponde circa a 2,53 cm
+    #1 inch sono circa 96 px 
     def __headerFattura__(self ,listaStringhe ,path ,flagSide ,fontsInfo):
         
         #font prima riga
@@ -109,9 +111,8 @@ class PDF(canvas.Canvas):
             #calcolo la massima
         posXLongest = func.getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[indexLongest] ,pointSizeLongest ,flagSide)
         
-        #IL CONTROLLO AVVIENE RISPETTO L'INSERIMENTO DI UN IMMAGINE E UNA DETERMINATA STRINGA CHE NON RISPETTA IL FONT
-        #controllo che le stringhe rispettino una determinata lunghezza rispetto all'immagine inserita  a destra l'immagine viene inserita a 400     
-        #funziona ma devi gestire meglio il resizing in base alle grandezze. E' stupido diminuire tutto.
+
+        #Il ridimensionamento avviene se e solo se le stringhe raggiungono l'immagine.Viene ridimensionat il point size solo di queste
         if flagSide == "r":
             
             lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
@@ -120,16 +121,17 @@ class PDF(canvas.Canvas):
             lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,faceNameFontFourthLine ,pointSizeFourthLine)
         
             listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]                   
-            #TODO:MODIFICA 350 CON VALORE IMMAGINE
+            
             posXLongest ,pointsSizeList = func.resizingLeft(width ,350 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
-                
+
+        #350 e 240 sono i limiti approssimativi dell'immagine        
         #controllo che le stringhe rispettino una determinata lunghezza rispetto all'immagine inserita 
         if flagSide == "s":
             
             posXLongest ,pointsSizeList = func.resizingRight(width ,240 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
                                                        
         
-        #Una volta calcolate le size ideali in base al font ,possiamo calcolare l'altezza e gestirla
+        #Una volta calcolate le size ideali in base al font ,possiamo calcolare l'altezza
         posYTitolo = func.getStartingStringHeight(height ,faceNameFontTitle ,pointsSizeList[0])
         posYIndirizzo = func.getStringHeight(posYTitolo ,faceNameFontSecondLine ,pointsSizeList[1])
         posYTelefonoIva = func.getStringHeight(posYIndirizzo ,faceNameFontThirdLine ,pointsSizeList[2])
@@ -144,7 +146,8 @@ class PDF(canvas.Canvas):
         
         #GESTIONE SITO EMAIL
         posXSitoEmail = func.getStringX(width ,posXLongest ,listaStringhe[3] ,faceNameFontFourthLine ,pointsSizeList[3] ,flagSide)
-        
+
+        #i colori sono mappati come (255,255,255) = (1,1,1) l'equazione vien da se
         self.setFillColorRGB(colourTitle[0] / 256 ,colourTitle[1] / 256 ,colourTitle[2] / 256)         
         self.setFont(faceNameFontTitle ,pointsSizeList[0])
         self.drawString(posXTitolo ,posYTitolo ,listaStringhe[0])
