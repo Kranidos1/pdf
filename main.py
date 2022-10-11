@@ -6,19 +6,21 @@ from PDFClass import PDF
 import wx
 from PersonalDialog import PersonalizedDialog
 from Frame import MainFrame
+
 width ,height = A4
 
-#app = wx.App()
-#mainFrame = MainFrame()
-#mainFrame.Show()
-fontsInfo = [(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 27) ,(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),
-                                                                                (0, 0, 0, 255), 32) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14)]
+app = wx.App()
+mainFrame = MainFrame()
+mainFrame.Show()
+#diciamo che il max e' 27
+#fontsInfo = [(('Bauhaus 93', 'BAUHS93.TTF'), (255, 0, 0, 255), 20) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),
+                                           #                                   (0, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14)]
 
-pdf = PDF("test1.pdf")
-pdf.__headerFattura__(["Qualcosa Titolo" ,"Via Rossi 100,Volla,Napoli,80040","Num Cell 3398210976 PIVA 848484","qualcosa.it - qualcosa@gmail.com"] ,"test6.png" ,"r" ,fontsInfo)
+#pdf = PDF("test1.pdf")
+#pdf.__headerFattura__(["Qualcosa fdsfdsfdsfdsTitolo" ,"Via Rossfdsfdsfdsfdsi 100,Vollfddsa,Napoli,80040","Num Cell 339821dfsdsfds0976 PIVA 848484","qualcosa.ifdfdsfsdfdssfdsfdsfdst - qualcosa@gmail.com"] ,"test6.png" ,"s" ,fontsInfo)
 #personal = PersonalizedDialog()
 #personal.ShowModal()
-#app.MainLoop()
+app.MainLoop()
 
 
 

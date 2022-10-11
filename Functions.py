@@ -2,8 +2,9 @@ from PIL import Image
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import utils
-from reportlab.lib.units import inch, cm
-
+from reportlab.lib.units import cm
+import cv2
+#non usata
 def get_image(path, width = 1 * cm):
     
     img = utils.ImageReader(path)
@@ -11,6 +12,7 @@ def get_image(path, width = 1 * cm):
     aspect = ih / float(iw)
     return width ,(width * aspect)
 
+#non usata
 def resizeImmagine(path ,x ,y):
     
     image = Image.open(path)
@@ -22,6 +24,24 @@ def resizeImmagine(path ,x ,y):
     # creating thumbnail
     image.save(path)
 
+#usata
+#230x170 quando a destra
+
+def resizeImage(path ,maxX ,maxY) :
+    
+        image = cv2.imread(path)
+        (image_height ,image_width ,_) = image.shape
+        resize_metric = 0.8
+        while(image_height > maxY or image_width > maxX) :
+                    
+            image_width = int(image_width * resize_metric)
+            image_height = int(image_height * resize_metric)
+                    
+            resize_metric = resize_metric - 0.05
+                    
+        image = cv2.resize(image ,(image_width ,image_height))
+        cv2.imwrite(path ,image)
+            
 #calcola ascissa stringa rispetto al font e il suo pointsize
 def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):
     
@@ -33,15 +53,15 @@ def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):
     #CALCOLO POSIZIONE RISPETTO LA STRINGA PIU' LUNGA
     if(posXLongest != None):
         
+        
         val = (val_x - posXLongest) // 2
-            
         #solo val caso sinistra
         if flagSide == "s" :
             
             return val_x - val
         
         else:
-            
+           
             return val
         
     else:
@@ -75,122 +95,118 @@ def getStringHeight(heightGiven ,font ,fontSize):
     
     return val_h
 
-#quando il testo e' a destra e immagine a sinistra ridimensiona il pointsize per entrare in un determinato spazio
-def resizingOrizzontaleLatoDestro(width ,posXLongest ,listaValutazione ,listaFields ,listaStringhe ,flagSide ,loopFlag ,fontsList ,pointSizeList ,maxPointX):
+#QUANDO L'IMMAGINE E' A SINISTRA
+def resizingRight(width ,widthImage ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide):
     
-    while loopFlag == 1:
-
-        
-        if not all(elem  > maxPointX for elem in listaFields) or not listaValutazione[0] > maxPointX:
-            
-            
-            #resizing
-            pointSizeList[0] = pointSizeList[0] - 1
-            pointSizeList[1] = pointSizeList[1] - 1
-            pointSizeList[2] = pointSizeList[2] - 1
-            pointSizeList[3] = pointSizeList[3] - 1   
-            
-        else:
+    
+    while not all((width - (elem + 20)) > (widthImage + 10) for elem in listaLunghezze): 
+                
+                
+        if (width - (listaLunghezze[0] + 20)) < (widthImage + 10) :
                     
-            loopFlag = 0
-            
-        #ricalcola
-        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontsList[0] ,pointSizeList[0] ,flagSide)
-        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontsList[1] ,pointSizeList[1] ,flagSide)
-        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontsList[3] ,pointSizeList[3] ,flagSide)
-        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontsList[2] ,pointSizeList[2] ,flagSide)
-        listaValutazione = [posXTitolo ,posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
-        listaFields = [posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
-        
-        #stringa più lunga che permette di centralizzare le stirnghe
-        longestString = min(listaValutazione)
-        indexLongest = listaValutazione.index(longestString)
-        
-        #CASO TITOLO
-        if(listaStringhe[indexLongest] == listaStringhe[0]):
-            
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[0] ,pointSizeList[0] ,flagSide)
-        
-        else:
-            
-            if(indexLongest == 1):
-                
-                longestFaceNameFont = fontsList[1]
-                longestPointSize = pointSizeList[1]
-                
-            elif(indexLongest == 2):
-                
-                longestFaceNameFont = fontsList[2]
-                longestPointSize = pointSizeList[2]
-                
-            else:     
-                
-                longestFaceNameFont = fontsList[3]
-                longestPointSize = pointSizeList[3]                           
-                
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,longestFaceNameFont ,longestPointSize ,flagSide)
-    
-        
-    return posXLongest ,pointSizeList
-
-#quando il testo e' a sinistra e immagine a destra ridimensiona il pointsize per entrare in un determinato spazio
-def resizingOrizzontaleLatoSinistro(width ,posXLongest ,listaValutazione ,listaLunghezze ,listaStringhe ,flagSide ,loopFlag ,fontsList ,pointSizeList):
-    
-    
-    while loopFlag == 1:
-        
-        lunghezzaTitolo = stringWidth(listaStringhe[0] ,fontsList[0] ,pointSizeList[0])
-        lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,fontsList[1] ,pointSizeList[1])
-        lunghezzaTelefonoIva = stringWidth(listaStringhe[2] ,fontsList[2] ,pointSizeList[2])
-        lunghezzaSitoEmail = stringWidth(listaStringhe[3] ,fontsList[3] ,pointSizeList[3])
-            
-        listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]
-            
-        if not all(elem < 380 for elem in listaLunghezze):     
-            
-            #resizing
-            pointSizeList[0] = pointSizeList[0] - 1
-            pointSizeList[1] = pointSizeList[1] - 1
-            pointSizeList[2] = pointSizeList[2] - 2
-            pointSizeList[3] = pointSizeList[3] - 1
-            
-        else:
+            pointsSizeList[0] = pointsSizeList[0] - 1
                     
-            loopFlag = 0
-        #ricalcola
-        posXTitolo = getStringX(width ,posXLongest ,listaStringhe[0] ,fontsList[0] ,pointSizeList[0] ,flagSide)
-        posXIndirizzo = getStringX(width ,posXLongest ,listaStringhe[1] ,fontsList[1] ,pointSizeList[1] ,flagSide)
-        posXSitoEmail = getStringX(width ,posXLongest ,listaStringhe[3] ,fontsList[3] ,pointSizeList[3] ,flagSide)
-        posXTelefonoIva = getStringX(width ,posXLongest ,listaStringhe[2] ,fontsList[2] ,pointSizeList[2] ,flagSide)
-        listaValutazione = [posXTitolo ,posXIndirizzo ,posXTelefonoIva ,posXSitoEmail]
-        
-        #stringa più lunga che permette di centralizzare le stirnghe
-        longestString = min(listaValutazione)
-        indexLongest = listaValutazione.index(longestString)
-        
-        #CASO TITOLO
-        if(listaStringhe[indexLongest] == listaStringhe[0]):
+        if (width - (listaLunghezze[1] + 20)) < (widthImage + 10) :
+                    
+            pointsSizeList[1] = pointsSizeList[1] - 1 
+                
+               
+        if (width - (listaLunghezze[2] + 20)) < (widthImage + 10) :
+                    
+            pointsSizeList[2] = pointsSizeList[2] - 1
+
+        if (width - (listaLunghezze[3] + 20)) < (widthImage + 10) :
+                    
+            pointsSizeList[3] = pointsSizeList[3] - 1
+                      
+        #ricalcolo lunghezze in base al font
+        lunghezzaTitolo = stringWidth(stringList[0] ,fontsList[0] ,pointsSizeList[0])
+        lunghezzaIndirizzo = stringWidth(stringList[1] ,fontsList[1] ,pointsSizeList[1])
+        lunghezzaTelefonoIva = stringWidth(stringList[2] ,fontsList[2] ,pointsSizeList[2])
+        lunghezzaSitoEmail = stringWidth(stringList[3] ,fontsList[2] ,pointsSizeList[3])
             
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[0] ,pointSizeList[0] ,flagSide)
+        listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail] 
+                
+        maxLun = max(listaLunghezze)
+        indexLongest = listaLunghezze.index(maxLun)
+        if(indexLongest == 0) :
+                    
+            pointSizeLongest = pointsSizeList[0]
+            faceName = fontsList[0]
+                
+        if(indexLongest == 1) :
+                    
+            pointSizeLongest = pointsSizeList[1]
+            faceName = fontsList[1]
+                    
+        if(indexLongest == 2) :
+                    
+            pointSizeLongest = pointsSizeList[2]
+            faceName = fontsList[2]
+                    
+        if(indexLongest == 3) :
+                    
+            pointSizeLongest = pointsSizeList[3]
+            faceName = fontsList[3]
+                    
+        #calcolo la massima
+        posXLongest = getStringX(width ,None ,stringList[indexLongest] ,faceName ,pointSizeLongest ,flagSide)
         
-        else:
+    return posXLongest ,pointsSizeList
+#resizing quando immagine a destra
+def resizingLeft(width ,val ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide) :
+    
+    
+    while not all((elem + 20) < val - 20 for elem in listaLunghezze) :
+                
+    #resizing dei pointsize in base alle stringhe troppo lunghe e aggiornamento del valore in lista
+        if(listaLunghezze[0] + 20) > val - 20 :
+                    
+            pointsSizeList[0] = pointsSizeList[0] - 1
+                    
+        if(listaLunghezze[1] + 20) > val - 20 :
+                    
+            pointsSizeList[1] = pointsSizeList[1] - 1
+                    
+        if(listaLunghezze[2] + 20) > val - 20 :
+                    
+            pointsSizeList[2] = pointsSizeList[2] - 1
+                    
+        if(listaLunghezze[3] + 20) > val - 20 :
+                    
+            pointsSizeList[3] = pointsSizeList[3] - 1
+                
+        #ricalcolo lunghezze in base al font
+        lunghezzaTitolo = stringWidth(stringList[0] ,fontsList[0] ,pointsSizeList[0])
+        lunghezzaIndirizzo = stringWidth(stringList[1] ,fontsList[1] ,pointsSizeList[1])
+        lunghezzaTelefonoIva = stringWidth(stringList[2] ,fontsList[2] ,pointsSizeList[2])
+        lunghezzaSitoEmail = stringWidth(stringList[3] ,fontsList[3] ,pointsSizeList[3])
             
-            if(indexLongest == 1):
+        listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail] 
                 
-                longestFaceNameFont = fontsList[1]
-                longestPointSize = pointSizeList[1]
-                
-            elif(indexLongest == 2):
-                
-                longestFaceNameFont = fontsList[2]
-                longestPointSize = pointSizeList[2]
-                
-            else:     
-                
-                longestFaceNameFont = fontsList[3]
-                longestPointSize = pointSizeList[3]                           
-                
-            posXLongest = getStringX(width ,None ,listaStringhe[indexLongest] ,longestFaceNameFont ,longestPointSize ,flagSide)
-            
-    return posXLongest ,pointSizeList
+        maxLun = max(listaLunghezze)
+        indexLongest = listaLunghezze.index(maxLun)
+        if(indexLongest == 0) :
+                    
+            pointSizeLongest = pointsSizeList[0]
+            faceName = fontsList[0]
+                    
+        if(indexLongest == 1) :
+                    
+            pointSizeLongest = pointsSizeList[1]
+            faceName = fontsList[1]
+                    
+        if(indexLongest == 2) :
+                    
+            pointSizeLongest = pointsSizeList[2]
+            faceName = fontsList[2]
+                    
+        if(indexLongest == 3) :
+                    
+            pointSizeLongest = pointsSizeList[3]
+            faceName = fontsList[3]
+                    
+        #calcolo la massima
+        posXLongest = getStringX(width ,None ,stringList[indexLongest] ,faceName ,pointSizeLongest ,flagSide)
         
+    return posXLongest ,pointsSizeList

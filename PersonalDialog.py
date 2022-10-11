@@ -34,6 +34,7 @@ class PersonalizedDialog(wx.Dialog):
         #da migliorare
         self.labelSample = wx.StaticText(self.panel ,label = "Esempio font" )
         
+        #DEFAULT FONT
         font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
                       underline = False, faceName = "Courier", encoding = wx.FONTENCODING_DEFAULT)
         self.labelSample.SetFont(font)
@@ -210,7 +211,7 @@ class PersonalizedDialog(wx.Dialog):
         
         if(posFont == 14):
             #Cooper COOPBL.TTF
-            faceName = faceName
+            faceName = "Cooper"
             font = wx.Font(12, family = wx.FONTFAMILY_MODERN, style = 0, weight = 90,
                     underline = False, faceName = faceName ,encoding = wx.FONTENCODING_DEFAULT)  
 

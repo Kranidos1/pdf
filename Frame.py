@@ -1,9 +1,6 @@
 from multiprocessing.sharedctypes import Value
-from sys import flags
 import wx
 from PDFClass import PDF
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 
 from PersonalDialog import PersonalizedDialog
 
@@ -196,6 +193,7 @@ class MainFrame(wx.Frame):
                 dialog.ShowModal()
                 #prendi font
                 info = dialog.GetData()
+                print(info)
                 self.infoFonts[3] = tuple(info)
 
                     
@@ -235,14 +233,13 @@ class MainFrame(wx.Frame):
                         email = self.fieldEmail.GetValue()
                         
                         if(email != ""):
+                            
                             sito = self.fieldSito.GetValue()
                             
                             if(sito != ""):
                                 
-                                pdfmetrics.registerFont(TTFont('ELEPHANT', 'ELEPHNTI.TTF'))
                                 pdf = PDF("test1.pdf")
                                 self.values.append(email + "  -  " + sito)
-                                #path = "test6.png"
                                 
                                 #gestione nessuna scelta fissando come flagside s di default
                                 try:
@@ -256,7 +253,8 @@ class MainFrame(wx.Frame):
                                 if(self.path != None):
                                     
                                     #self.infoFonts
-                                    pdf.__headerFattura__(self.values ,'ELEPA' ,64 ,"Times-Roman" ,32 ,self.path ,flagSide ,self.infoFonts)
+                                    print(self.values[2] ,self.values[3])
+                                    pdf.__headerFattura__(self.values ,self.path ,flagSide ,self.infoFonts)
                                 
                                 else:
                                     
