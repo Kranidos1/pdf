@@ -10,7 +10,7 @@ class MainFrame(wx.Frame):
     def __init__(self):
         
 
-        super().__init__(parent = None ,title = "mainFrame")
+        super().__init__(parent = None ,title = "HeaderCreator")
         
         #default fonts
         self.infoFonts = [(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 24) ,(('Times New Roman', 'TIMES.TTF'), (0, 0, 0, 255), 14) ,(('Times New Roman', 'TIMES.TTF'),
