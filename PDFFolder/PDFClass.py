@@ -2,17 +2,14 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase.pdfmetrics import stringWidth
-import Functions as func
+from PDFFolder import Functions as func
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-import cv2
-from PIL import Image
-import wx
 class PDF(canvas.Canvas):
     
-    def __init__(self ,title):
+    def __init__(self ,pdfPath):
         
-        super().__init__(title ,pagesize = A4 ,bottomup = 1)
+        super().__init__(pdfPath ,pagesize = A4 ,bottomup = 1)
         
     def __headerFattura__(self ,listaStringhe ,path ,flagSide ,fontsInfo):
         
@@ -68,7 +65,7 @@ class PDF(canvas.Canvas):
         width ,height = A4
         
         #crea logo ridimensionato
-        func.createLogo(path)
+        format = func.createLogo(path)
                
         if(flagSide == "s") :
             
@@ -112,29 +109,6 @@ class PDF(canvas.Canvas):
             #calcolo la massima
         posXLongest = func.getStringX(width ,None ,listaStringhe[indexLongest] ,fontsList[indexLongest] ,pointSizeLongest ,flagSide)
         
-        #Una volta calcolate le size ideali in base al font ,possiamo calcolare l'altezza e gestirla
-        posYTitolo = func.getStartingStringHeight(height ,faceNameFontTitle ,pointSizeTitle)
-        posYIndirizzo = func.getStringHeight(posYTitolo ,faceNameFontSecondLine ,pointSizeSecondLine)
-        posYTelefonoIva = func.getStringHeight(posYIndirizzo ,faceNameFontThirdLine ,pointSizeThirdLine)
-        posYSitoEmail = func.getStringHeight(posYTelefonoIva ,faceNameFontFourthLine ,pointSizeFourthLine)
-        
-        #TODO: modifica
-        #sostanzialmente vede se il titolo ha un pointsize maggiore dei field e nel caso lo ridimensiona altrimenti ridimensiona quello dei fields
-        while(posYSitoEmail < 650):
-            
-            if((pointSizeTitle - sizeFields) > 2):
-                
-                pointSizeTitle = pointSizeTitle - 1
-                
-            else:
-                
-                sizeFields = sizeFields - 1
-            #ricalcolo
-            posYTitolo = func.getStartingStringHeight(height ,faceNameFontTitle ,pointSizeTitle)
-            posYIndirizzo = func.getStringHeight(posYTitolo ,faceNameFontSecondLine ,pointSizeSecondLine)
-            posYTelefonoIva = func.getStringHeight(posYIndirizzo ,faceNameFontThirdLine ,pointSizeThirdLine)
-            posYSitoEmail = func.getStringHeight(posYTelefonoIva ,faceNameFontFourthLine ,pointSizeFourthLine)
-        
         #IL CONTROLLO AVVIENE RISPETTO L'INSERIMENTO DI UN IMMAGINE E UNA DETERMINATA STRINGA CHE NON RISPETTA IL FONT
         #controllo che le stringhe rispettino una determinata lunghezza rispetto all'immagine inserita  a destra l'immagine viene inserita a 400     
         #funziona ma devi gestire meglio il resizing in base alle grandezze. E' stupido diminuire tutto.
@@ -171,8 +145,6 @@ class PDF(canvas.Canvas):
         #GESTIONE SITO EMAIL
         posXSitoEmail = func.getStringX(width ,posXLongest ,listaStringhe[3] ,faceNameFontFourthLine ,pointsSizeList[3] ,flagSide)
         
-        
-        print([colourTitle])
         self.setFillColorRGB(colourTitle[0] / 256 ,colourTitle[1] / 256 ,colourTitle[2] / 256)         
         self.setFont(faceNameFontTitle ,pointsSizeList[0])
         self.drawString(posXTitolo ,posYTitolo ,listaStringhe[0])

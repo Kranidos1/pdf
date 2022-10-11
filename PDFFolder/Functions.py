@@ -1,18 +1,16 @@
 from PIL import Image
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
-from reportlab.lib import utils
-from reportlab.lib.units import cm ,inch
-import cv2
-#non usata
-from reportlab.lib import utils
-            
+
+#crea il logo ridimensionato nella cartella del progetto
 def createLogo(path):
     
     image = Image.open(path)
     image_new = Image.new('RGB' ,(307 ,227))
     format = image.format
     image.save("newImage." + format)
+    
+    return format
     
 #calcola ascissa stringa rispetto al font e il suo pointsize
 def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):

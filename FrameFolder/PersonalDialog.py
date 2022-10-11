@@ -1,7 +1,5 @@
 
 import wx
-from PDFClass import PDF
-
 class PersonalizedDialog(wx.Dialog):
     
     def __init__(self ,info):
