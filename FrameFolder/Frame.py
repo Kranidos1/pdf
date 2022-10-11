@@ -117,7 +117,7 @@ class MainFrame(wx.Frame):
         self.listaScelte = wx.ListBox(self.panel ,choices = ["r","s"] ,size=(25,50) ,style = wx.LB_SINGLE)
         
         bottoneSceltaImmagine = wx.Button(self.panel ,label = "Scegli immagine" ,size = (100,30))
-        bottoneSceltaImmagine.Bind(wx.EVT_BUTTON ,self.faiQualcosa)
+        bottoneSceltaImmagine.Bind(wx.EVT_BUTTON ,self.sceltaImmagine)
         
         boxSceltaLato = wx.BoxSizer(wx.HORIZONTAL)
         boxSceltaLato.Add(labelLato ,proportion = 0 ,flag = wx.ALL ,border = 3)
@@ -197,7 +197,7 @@ class MainFrame(wx.Frame):
                     self.infoFonts[3] = tuple(info)
 
                     
-    def faiQualcosa(self ,evt):
+    def sceltaImmagine(self ,evt):
         
         dlg = wx.FileDialog(None, "Scegli immagine", style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST ,wildcard = ".png (*.png)|*.png|.jpg (*.jpg)|*.jpg|.JPEG (*.JPEG)|*.JPEG")
         if dlg.ShowModal() == wx.ID_CANCEL:
@@ -262,6 +262,8 @@ class MainFrame(wx.Frame):
                                         
                                         dial = wx.MessageDialog(self.panel ,"PDF creato nella cartella selezionata." , caption = "Successo!.", style = wx.ICON_INFORMATION | wx.OK )
                                         dial.ShowModal()
+
+                                        self.Close()
                                         
                                     else:
 
