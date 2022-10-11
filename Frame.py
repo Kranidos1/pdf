@@ -190,11 +190,11 @@ class MainFrame(wx.Frame):
                 self.checkFontSitoEmail.Set3StateValue(False)
                 #dialogo scelta font
                 dialog = PersonalizedDialog(self.infoFonts[3])
-                dialog.ShowModal()
-                #prendi font
-                info = dialog.GetData()
-                print(info)
-                self.infoFonts[3] = tuple(info)
+                if(dialog.ShowModal() == wx.ID_OK):
+                    #prendi font
+                    info = dialog.GetData()
+                    print(info)
+                    self.infoFonts[3] = tuple(info)
 
                     
     def faiQualcosa(self ,evt):

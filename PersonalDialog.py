@@ -29,7 +29,7 @@ class PersonalizedDialog(wx.Dialog):
         self.boxFonts.Add(self.listaFonts ,proportion = 0 ,flag = wx.ALL ,border = 5)
         
         #self.boxSceltaESample = wx.BoxSizer(wx.HORIZONTAL)
-        
+        self.SetEscapeId(wx.ID_CLOSE)
         self.boxScelte = wx.BoxSizer(wx.VERTICAL)
         #da migliorare
         self.labelSample = wx.StaticText(self.panel ,label = "Esempio font" )
@@ -41,13 +41,13 @@ class PersonalizedDialog(wx.Dialog):
         
         self.labelSize = wx.StaticText(self.panel ,label = "PointSize" )
         
-        self.spin = wx.SpinCtrl(self.panel ,value = "10")
+        self.spin = wx.SpinCtrl(self.panel ,value = "14")
         self.spin.SetRange(10 ,32)
-        self.spin.SetIncrement(2)
+        self.spin.SetIncrement(1)
         
         self.buttonColore = wx.Button(self.panel ,label = "Scegli Colore")
         
-        self.buttonScelto = wx.Button(self.panel ,label = "Scelto!")
+        self.buttonScelto = wx.Button(self.panel ,wx.ID_OK ,label = "Scelto!" )
         
         self.boxScelte.Add(self.labelSample ,proportion = 0 ,flag =  wx.TOP | wx.BOTTOM,border = 25)
         self.boxScelte.Add(self.labelSize ,proportion = 0 ,flag = wx.BOTTOM  ,border = 0)
@@ -61,16 +61,18 @@ class PersonalizedDialog(wx.Dialog):
         
         self.panel.SetSizerAndFit(self.boxAll)
         
+        self.spin.Bind(wx.EVT_SPINCTRL ,self.raccogliSize)
         self.buttonColore.Bind(wx.EVT_BUTTON ,self.cambiaColore)
         self.listaFonts.Bind(wx.EVT_LISTBOX ,self.cambiaFont)
-        self.buttonScelto.Bind(wx.EVT_BUTTON ,self.raccogliInfo)
+        #self.buttonScelto.Bind(wx.EVT_BUTTON ,self.raccogliInfo)
+
         
         self.Fit()
         
-    def raccogliInfo(self ,evt):
+    def raccogliSize(self ,evt):
         
         self.info[2] = self.spin.GetValue()
-        self.Close(True)
+        
         
     def cambiaColore(self ,evt):
         
@@ -238,4 +240,5 @@ class PersonalizedDialog(wx.Dialog):
                 self.labelSample.SetFont(font.Italic())
                 
     def GetData(self):
+        
         return tuple(self.info)
