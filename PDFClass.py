@@ -3,10 +3,11 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import Functions as func
-from reportlab.lib.units import inch, cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import cv2
+from PIL import Image
+import wx
 class PDF(canvas.Canvas):
     
     def __init__(self ,title):
@@ -14,13 +15,6 @@ class PDF(canvas.Canvas):
         super().__init__(title ,pagesize = A4 ,bottomup = 1)
         
     def __headerFattura__(self ,listaStringhe ,path ,flagSide ,fontsInfo):
-        
-        #riferimenti
-        #for i in range(0 ,800 ,100):
-            #self.drawString(15 ,i ,str(i))
-           
-        #for i in range(0 ,600 ,100):
-            #self.drawString(i ,820 ,str(i)) 
         
         #font prima riga
         fontsInfosTitle = list(fontsInfo[0])
@@ -69,53 +63,22 @@ class PDF(canvas.Canvas):
         colourFourthLine = fontsInfosFourthLine[1][0:3]
         #pointSize quarta riga
         pointSizeFourthLine = fontsInfosFourthLine[2]      
-             
-        #indice ridimensionamento
-       # i = 7
+        
         #prendi altezza e larghezza immagine scalata
-        #widthImage ,heightImage = func.get_image(path ,i * cm)
-        width,height = A4
+        width ,height = A4
         
-        #image_y = 830 - heightImage
-        #centralizza l'immagine
-       # if(image_y > 680):
-                
-            #image_y = image_y - ((height - image_y) // 4)
-                
-        
-        #gestione immagine con altezza troppo grande
-        #while image_y < 680 :
-    
-            #i -= 1
-            #widthImage ,heightImage = func.get_image(path ,i * cm)
-
-            #image_y = 830 - heightImage
-            #if(image_y > 680):
-                
-                #image_y = image_y - ((height - image_y) // 4)
-                
-        #gestione immagine con larghezza troppo grande
-        #while widthImage > 170 :
-            #i -= 1
-            #widthImage ,heightImage = func.get_image(path ,i * cm)
-
-            #image_y = 830 - heightImage           
-            #if(image_y > 680):
-                
-                #image_y = image_y - ((height - image_y) // 4)
-                
-        #viene inserita a sinistra con uno spazio dal bordo
-        func.resizeImage(path ,230 ,170)
-        if flagSide == "s":
+        #crea logo ridimensionato
+        func.createLogo(path)
+               
+        if(flagSide == "s") :
             
-            self.drawInlineImage(path ,20 ,660 ,230 ,170)
+            self.drawInlineImage("newImage." + format ,10 ,665 ,230 ,170)
             
-        else:
-                #ridimensioni e salvi l'immagine in un box definito di larghezza 230 e altezza 170 considerando che il foglio e' lungo 595 e altezza 841
-
-                self.drawInlineImage(path ,350 ,660 ,230 ,170)
-        
-        
+        else :
+            
+            self.drawInlineImage("newImage." + format ,356 ,665 ,230 ,170)
+            
+            
        # #calcolo la stringa piu' lunga rispetto al proprio font
         lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
         lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,faceNameFontSecondLine ,pointSizeSecondLine)
@@ -189,7 +152,7 @@ class PDF(canvas.Canvas):
         #controllo che le stringhe rispettino una determinata lunghezza rispetto all'immagine inserita 
         if flagSide == "s":
             
-            posXLongest ,pointsSizeList = func.resizingRight(width ,230 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
+            posXLongest ,pointsSizeList = func.resizingRight(width ,240 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
                                                        
         
         #Una volta calcolate le size ideali in base al font ,possiamo calcolare l'altezza e gestirla

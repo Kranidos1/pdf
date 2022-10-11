@@ -50,7 +50,7 @@ class MainFrame(wx.Frame):
         labelFormat = wx.StaticText(parent = self.panel ,label = ("Indirizzo :"))
         
         boxIndirizzo.Add(labelFormat ,proportion = 0 ,flag = wx.ALL ,border = 3)
-        boxIndirizzo.Add(self.fieldIndirizzo ,proportion = 0 ,flag = wx.ALL ,border = 2)
+        boxIndirizzo.Add(self.fieldIndirizzo ,proportion = 0 ,flag = wx.ALL ,border = 2) 
         
         self.checkFontIndirizzo= wx.CheckBox(self.panel, label="Scelta Font")
         boxIndirizzo.Add(self.checkFontIndirizzo ,proportion = 0 ,flag = wx.ALL ,border = 5)

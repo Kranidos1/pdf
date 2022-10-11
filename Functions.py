@@ -2,46 +2,18 @@ from PIL import Image
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import utils
-from reportlab.lib.units import cm
+from reportlab.lib.units import cm ,inch
 import cv2
 #non usata
-def get_image(path, width = 1 * cm):
-    
-    img = utils.ImageReader(path)
-    iw, ih = img.getSize()
-    aspect = ih / float(iw)
-    return width ,(width * aspect)
-
-#non usata
-def resizeImmagine(path ,x ,y):
+from reportlab.lib import utils
+            
+def createLogo(path):
     
     image = Image.open(path)
-        
-    MAX_SIZE = (x,y)
+    image_new = Image.new('RGB' ,(307 ,227))
+    format = image.format
+    image.save("newImage." + format)
     
-    image.thumbnail(MAX_SIZE)
-    
-    # creating thumbnail
-    image.save(path)
-
-#usata
-#230x170 quando a destra
-
-def resizeImage(path ,maxX ,maxY) :
-    
-        image = cv2.imread(path)
-        (image_height ,image_width ,_) = image.shape
-        resize_metric = 0.8
-        while(image_height > maxY or image_width > maxX) :
-                    
-            image_width = int(image_width * resize_metric)
-            image_height = int(image_height * resize_metric)
-                    
-            resize_metric = resize_metric - 0.05
-                    
-        image = cv2.resize(image ,(image_width ,image_height))
-        cv2.imwrite(path ,image)
-            
 #calcola ascissa stringa rispetto al font e il suo pointsize
 def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):
     
@@ -96,26 +68,26 @@ def getStringHeight(heightGiven ,font ,fontSize):
     return val_h
 
 #QUANDO L'IMMAGINE E' A SINISTRA
-def resizingRight(width ,widthImage ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide):
+def resizingRight(width ,maxX ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide):
     
     
-    while not all((width - (elem + 20)) > (widthImage + 10) for elem in listaLunghezze): 
+    while not all((width - (elem + 20)) > (maxX + 10) for elem in listaLunghezze): 
                 
                 
-        if (width - (listaLunghezze[0] + 20)) < (widthImage + 10) :
+        if (width - (listaLunghezze[0] + 20)) < (maxX + 10) :
                     
             pointsSizeList[0] = pointsSizeList[0] - 1
                     
-        if (width - (listaLunghezze[1] + 20)) < (widthImage + 10) :
+        if (width - (listaLunghezze[1] + 20)) < (maxX + 10) :
                     
             pointsSizeList[1] = pointsSizeList[1] - 1 
                 
                
-        if (width - (listaLunghezze[2] + 20)) < (widthImage + 10) :
+        if (width - (listaLunghezze[2] + 20)) < (maxX + 10) :
                     
             pointsSizeList[2] = pointsSizeList[2] - 1
 
-        if (width - (listaLunghezze[3] + 20)) < (widthImage + 10) :
+        if (width - (listaLunghezze[3] + 20)) < (maxX + 10) :
                     
             pointsSizeList[3] = pointsSizeList[3] - 1
                       
@@ -153,26 +125,27 @@ def resizingRight(width ,widthImage ,stringList ,fontsList ,pointsSizeList ,list
         posXLongest = getStringX(width ,None ,stringList[indexLongest] ,faceName ,pointSizeLongest ,flagSide)
         
     return posXLongest ,pointsSizeList
+
 #resizing quando immagine a destra
-def resizingLeft(width ,val ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide) :
+def resizingLeft(width ,maxX ,stringList ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide) :
     
     
-    while not all((elem + 20) < val - 20 for elem in listaLunghezze) :
+    while not all((elem + 20) < maxX for elem in listaLunghezze) :
                 
     #resizing dei pointsize in base alle stringhe troppo lunghe e aggiornamento del valore in lista
-        if(listaLunghezze[0] + 20) > val - 20 :
+        if(listaLunghezze[0] + 20) > maxX :
                     
             pointsSizeList[0] = pointsSizeList[0] - 1
                     
-        if(listaLunghezze[1] + 20) > val - 20 :
+        if(listaLunghezze[1] + 20) > maxX :
                     
             pointsSizeList[1] = pointsSizeList[1] - 1
                     
-        if(listaLunghezze[2] + 20) > val - 20 :
+        if(listaLunghezze[2] + 20) > maxX :
                     
             pointsSizeList[2] = pointsSizeList[2] - 1
                     
-        if(listaLunghezze[3] + 20) > val - 20 :
+        if(listaLunghezze[3] + 20) > maxX :
                     
             pointsSizeList[3] = pointsSizeList[3] - 1
                 
