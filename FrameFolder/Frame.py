@@ -161,7 +161,7 @@ class MainFrame(wx.Frame):
                 dialog.ShowModal()
                 #prendi font
                 info = dialog.GetData()
-                print(info)
+                
                 self.infoFonts[0] = tuple(info)
                     
                       
