@@ -45,7 +45,7 @@ def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):
             return val_x - 20
         #-20 caso sinistra
     
-#calcola ascissa del titolo basandosi sul font e pointsize
+#calcola ordinata del titolo basandosi sul font e pointsize
 def getStartingStringHeight(heightPDF ,font ,fontSize):
     
     face = pdfmetrics.getFont(font).face
