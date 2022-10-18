@@ -27,6 +27,7 @@ class PDF(canvas.Canvas):
         #pointSize prima riga
         pointSizeTitle = fontsInfosTitle[2]
         
+        
         #font seconda riga
         fontsInfosSecondLine = list(fontsInfo[1])
         tuplaFaceTTF = fontsInfosSecondLine[0]
@@ -67,17 +68,43 @@ class PDF(canvas.Canvas):
         width ,height = A4
         
         #crea logo ridimensionato
-        format = func.createLogo(path)
-               
+        widthIm ,heightIm = func.createLogo(path)
+
+        #centralizza l'immagine rispetto l'altezza se necessario
+        val = 0
+        if(height - heightIm) > 690 :
+
+            val = ((height - heightIm) - 690) // 2
+
+        #setto posizione massima delle stringhe
+        #considerando maxLunghezzaImmagine di 325 unita 325 + spazio = 350 max
         if(flagSide == "s") :
             
-            self.drawInlineImage("newImage." + format ,10 ,665 ,230 ,170)
+            valX = 350
+            if(20 + widthIm) < 330 :
+
+                valX = 330 - (20 + widthIm)
+
+        if(flagSide == "r") :
+            
+            #considerando maxLunghezzaImmagine di 325 unita 250 + 325 + spazio = bordo - 15
+            valX = 250
+
+            if(width - (widthIm + 20)) > valX :
+
+                valX = width - (widthIm + 20)
+
+        #aggiorna punti inserimento
+        if(flagSide == "s") :
+            
+            self.drawInlineImage("newImage.jpg" ,20 ,690 + val ,widthIm ,heightIm)
             
         else :
+            #da modificare
+    
+            self.drawInlineImage("newImage.jpg" ,valX ,690 + val ,widthIm ,heightIm)
             
-            self.drawInlineImage("newImage." + format ,356 ,665 ,230 ,170)
-            
-            
+
        # #calcolo la stringa piu' lunga rispetto al proprio font
         lunghezzaTitolo = stringWidth(listaStringhe[0] ,faceNameFontTitle ,pointSizeTitle)
         lunghezzaIndirizzo = stringWidth(listaStringhe[1] ,faceNameFontSecondLine ,pointSizeSecondLine)
@@ -122,13 +149,13 @@ class PDF(canvas.Canvas):
         
             listaLunghezze = [lunghezzaTitolo ,lunghezzaIndirizzo ,lunghezzaTelefonoIva ,lunghezzaSitoEmail]                   
             
-            posXLongest ,pointsSizeList = func.resizingLeft(width ,350 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
+            posXLongest ,pointsSizeList = func.resizingLeft(width ,valX ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
 
         #350 e 240 sono i limiti approssimativi dell'immagine        
         #controllo che le stringhe rispettino una determinata lunghezza rispetto all'immagine inserita 
         if flagSide == "s":
             
-            posXLongest ,pointsSizeList = func.resizingRight(width ,240 ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
+            posXLongest ,pointsSizeList = func.resizingRight(width ,valX ,listaStringhe ,fontsList ,pointsSizeList ,listaLunghezze ,posXLongest ,flagSide)
                                                        
         
         #Una volta calcolate le size ideali in base al font ,possiamo calcolare l'altezza

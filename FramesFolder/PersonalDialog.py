@@ -48,7 +48,8 @@ class PersonalizedDialog(wx.Dialog):
         
         self.buttonColore = wx.Button(self.panel ,label = "Scegli Colore")
         
-        self.buttonScelto = wx.Button(self.panel ,wx.ID_OK ,label = "Scelto!" )
+        self.buttonScelto = wx.Button(self.panel ,label = "Scelto!" )
+        self.buttonScelto.Bind(wx.EVT_BUTTON ,self.onClose)
         
         self.boxScelte.Add(self.labelSample ,proportion = 0 ,flag =  wx.TOP | wx.BOTTOM,border = 25)
         self.boxScelte.Add(self.labelSize ,proportion = 0 ,flag = wx.BOTTOM  ,border = 0)
@@ -107,3 +108,7 @@ class PersonalizedDialog(wx.Dialog):
     def GetData(self):
         
         return tuple(self.info)
+
+    def onClose(self ,evt):
+
+        self.Close()

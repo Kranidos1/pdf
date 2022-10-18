@@ -154,52 +154,39 @@ class MainFrame(wx.Frame):
     def cambiaFont(self ,evt):
              #non appare mai la V
             if evt.Id == self.checkFontNomeAzienda.Id :
-                
-                self.checkFontNomeAzienda.Set3StateValue(False)
-                #dialogo scelta font
-                dialog = PersonalizedDialog(self.infoFonts[0])
-                dialog.ShowModal()
-                #prendi font
-                info = dialog.GetData()
-                
-                self.infoFonts[0] = tuple(info)
-                    
-                      
+
+                obj = self.checkFontNomeAzienda
+                indice = 0
+            
             if evt.Id == self.checkFontIndirizzo.Id :
-                
-                self.checkFontIndirizzo.Set3StateValue(False)
-                #dialogo scelta font
-                dialog = PersonalizedDialog(self.infoFonts[1])
-                dialog.ShowModal()
-                #prendi font
-                info = dialog.GetData()
-                self.infoFonts[1] = tuple(info)
-                
-                     
+
+                obj = self.checkFontNomeAzienda
+                indice = 1
+            
             if evt.Id == self.checkFontNumTelefonoPIVA.Id :
-                
-                self.checkFontNumTelefonoPIVA.Set3StateValue(False)
-                #dialogo scelta font
-                dialog = PersonalizedDialog(self.infoFonts[2])
-                dialog.ShowModal()
-                #prendi font
-                info = dialog.GetData()
-                self.infoFonts[2] = tuple(info)
-                      
+
+                obj = self.checkFontNumTelefonoPIVA
+                indice = 2
+            
             if evt.Id == self.checkFontSitoEmail.Id :
+
+                obj = self.checkFontSitoEmail
+                indice = 3
                 
-                self.checkFontSitoEmail.Set3StateValue(False)
-                #dialogo scelta font
-                dialog = PersonalizedDialog(self.infoFonts[3])
-                if(dialog.ShowModal() == wx.ID_OK):
-                    #prendi font
-                    info = dialog.GetData()
-                    self.infoFonts[3] = tuple(info)
+            obj.Set3StateValue(False)
+            #dialogo scelta font
+            dialog = PersonalizedDialog(self.infoFonts[indice])
+            dialog.ShowModal()
+            #prendi font
+            info = dialog.GetData()
+            dialog.Destroy()
+                
+            self.infoFonts[indice] = tuple(info)
 
                     
     def sceltaImmagine(self ,evt):
         
-        dlg = wx.FileDialog(None, "Scegli immagine", style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST ,wildcard = ".png (*.png)|*.png|.jpg (*.jpg)|*.jpg|.JPEG (*.JPEG)|*.JPEG")
+        dlg = wx.FileDialog(None, "Scegli immagine", style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST ,wildcard = ".jpg (*.jpg)|*.jpg|.JPEG (*.JPEG)|*.JPEG")
         if dlg.ShowModal() == wx.ID_CANCEL:
             
             dial = wx.MessageDialog(self.panel ,"Non hai scelto nessuna immagine." , caption = "No image selected.", style = wx.ICON_EXCLAMATION | wx.OK )
@@ -222,70 +209,80 @@ class MainFrame(wx.Frame):
                 
                 self.values.append(indirizzo)
                 telefono = self.fieldNumTelefono.GetValue()
-                
-                if(telefono != ""):
+
+                #controllo su tel se vuoto
+                if(telefono != "") :
+
+                    tel = "Tel :" + telefono + "  -  "
+
+                else :
+
+                    tel = ""
+
+                iva = self.fieldPIVA.GetValue()
+                #altrimenti nulla
                     
-                    iva = self.fieldPIVA.GetValue()
-                    
-                    if(iva != ""):
+                if(iva != ""):
                         
-                        self.values.append("Tel :" + telefono + "  -  P. IVA : " + iva)
+                        self.values.append(tel + "P. IVA : " + iva)
+
+                        #prendo email e sito
                         email = self.fieldEmail.GetValue()
-                        
-                        if(email != ""):
-                            
-                            sito = self.fieldSito.GetValue()
-                            
-                            if(sito != ""):
-                                
-                                self.values.append(email + "  -  " + sito)
-                                
-                                #gestione nessuna scelta fissando come flagside s di default
-                                try:
-                                    
-                                    flagSide = self.listaScelte.GetString(self.listaScelte.GetSelection())
-                                    
-                                except wx._core.wxAssertionError:
-                                    #default
-                                    flagSide = "s"
-                                    
-                                if(self.path != None):
-                                    
-                                    #self.infoFonts
-                                    dlg = wx.FileDialog(self.panel ,"Scegli titolo e cartella del pdf." ,"" ,"" ,"PDF files|.pdf" ,wx.FD_SAVE)
+                        sito = self.fieldSito.GetValue()
 
-                                    if dlg.ShowModal() == wx.ID_OK:
+                        if(email != "" and sito != "") :
+
+                            self.values.append("Email : " + email + " Sito :" + sito)  
+
+                        elif(email != "" and sito == "") :
+                            
+                            self.values.append("Email : " + email)  
+
+                        elif(email == "" and sito != "") :
+
+                            self.values.append("Sito: " + sito)
+
+                        else :
+
+                            self.values.append("")
+                                
+                    #gestione nessuna scelta fissando come flagside s di default
+                        try:
+                                    
+                            flagSide = self.listaScelte.GetString(self.listaScelte.GetSelection())
+                                    
+                        except wx._core.wxAssertionError:
+                            #default
+                            flagSide = "s"
+                                    
+                        if(self.path != None):
+                                    
+                            #self.infoFonts
+                            dlg = wx.FileDialog(self.panel ,"Scegli titolo e cartella del pdf." ,"" ,"" ,"PDF files|.pdf" ,wx.FD_SAVE)
+
+                            if dlg.ShowModal() == wx.ID_OK:
                                                                             
-                                        pathPDF = dlg.GetPath()
-                                        pdf = PDF(pathPDF)
-                                        pdf.__headerFattura__(self.values ,self.path ,flagSide ,self.infoFonts)
+                                pathPDF = dlg.GetPath()
+                                pdf = PDF(pathPDF)
+                                pdf.__headerFattura__(self.values ,self.path ,flagSide ,self.infoFonts)
                                         
-                                        dial = wx.MessageDialog(self.panel ,"PDF creato nella cartella selezionata." , caption = "Successo!.", style = wx.ICON_INFORMATION | wx.OK )
-                                        dial.ShowModal()
+                                dial = wx.MessageDialog(self.panel ,"PDF creato nella cartella selezionata." , caption = "Successo!.", style = wx.ICON_INFORMATION | wx.OK )
+                                dial.ShowModal()
 
-                                        self.Close()
+                                self.Close()
                                         
-                                    else:
-
-                                        dial = wx.MessageDialog(self.panel ,"Non hai scelto nessun titolo/cartella." , caption = "Cartella non selezionata.", style = wx.ICON_EXCLAMATION | wx.OK )
-                                        dial.ShowModal()
-                                
-                                else:
-                                    
-                                    dial = wx.MessageDialog(self.panel ,"Non hai scelto nessuna immagine." , caption = "Immagine non selezionata.", style = wx.ICON_EXCLAMATION | wx.OK )
-                                    dial.ShowModal()
-                                    
                             else:
-                                dial = wx.MessageDialog(self.panel ,"Inserire il sito" , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
-                                dial.ShowModal()  
+
+                                dial = wx.MessageDialog(self.panel ,"Non hai scelto nessun titolo/cartella." , caption = "Cartella non selezionata.", style = wx.ICON_EXCLAMATION | wx.OK )
+                                dial.ShowModal()
+                                
                         else:
-                            dial = wx.MessageDialog(self.panel ,"Inserire l'email." , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
-                            dial.ShowModal()                           
-                    else:
-                        dial = wx.MessageDialog(self.panel ,"Inserire la P. IVA." , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
-                        dial.ShowModal()
+                                    
+                            dial = wx.MessageDialog(self.panel ,"Non hai scelto nessuna immagine." , caption = "Immagine non selezionata.", style = wx.ICON_EXCLAMATION | wx.OK )
+                            dial.ShowModal()
+                       
                 else:
-                    dial = wx.MessageDialog(self.panel ,"Inserire il numero di telefono." , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
+                    dial = wx.MessageDialog(self.panel ,"Inserire la P. IVA." , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
                     dial.ShowModal()
             else:
                 dial = wx.MessageDialog(self.panel ,"Inserire l'indirizzo." , caption = "Field vuoto.", style = wx.ICON_EXCLAMATION | wx.OK )
