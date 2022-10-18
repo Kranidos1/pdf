@@ -1,16 +1,34 @@
 from PIL import Image
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
+import wx
 
 #crea il logo ridimensionato nella cartella del progetto
 def createLogo(path):
     
-    image = Image.open(path)
-    image_new = Image.new('RGB' ,(307 ,227))
-    format = image.format
-    image.save("newImage." + format)
-    
-    return format
+    image = wx.Image(path)
+
+    width ,height = image.GetSize()
+
+    maxW = 250
+    maxH = 100
+
+    if(width > maxW):
+
+        t = width / maxW
+        width = width / t
+        height = height / t
+
+    if(height > maxH):
+
+        t = height / maxH
+        height = height / t
+        width = width / t
+
+    image = image.Scale(int(width) ,int(height) ,quality = wx.IMAGE_QUALITY_HIGH)
+    image.SaveFile("newImage.jpg")
+
+    return width ,height
     
 #calcola ascissa stringa rispetto al font e il suo pointsize
 def getStringX(widthPDF ,posXLongest ,stringInput ,font ,fontSize ,flagSide):
@@ -129,7 +147,7 @@ def resizingLeft(width ,maxX ,stringList ,fontsList ,pointsSizeList ,listaLunghe
     
     
     while not all((elem + 20) < maxX for elem in listaLunghezze) :
-                
+        
     #resizing dei pointsize in base alle stringhe troppo lunghe e aggiornamento del valore in lista
         if(listaLunghezze[0] + 20) > maxX :
                     
